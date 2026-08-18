@@ -1,0 +1,19 @@
+{
+  "name": "com.fgufw.core",
+  "version": "1.0.0",
+  "displayName": "FGUFW Core",
+  "description": "Common utilities, type extensions, runtime components, and editor tools for Unity.",
+  "unity": "2022.3",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "feigebabata"
+  },
+  "keywords": [
+    "fgufw",
+    "utilities",
+    "extensions"
+  ],
+  "dependencies": {
+    "com.unity.ugui": "1.0.0"
+  }
+}
