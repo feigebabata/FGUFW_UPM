@@ -1,0 +1,20 @@
+{
+  "name": "com.fgufw.excel-utils",
+  "version": "1.0.0",
+  "displayName": "FGUFW Excel Utils",
+  "description": "Editor tools for importing formatted Excel workbooks and generating C# configuration classes and JSON data.",
+  "unity": "2022.3",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "feigebabata"
+  },
+  "keywords": [
+    "fgufw",
+    "excel",
+    "configuration",
+    "editor"
+  ],
+  "dependencies": {
+    "com.fgufw.core": "1.0.0"
+  }
+}
