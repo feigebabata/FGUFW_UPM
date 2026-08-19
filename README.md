@@ -40,7 +40,7 @@ FGUFW_UPM
   "dependencies": 
   {
     "com.unity.addressables": "1.21.21",
-    "com.fgufw.core": "file:../FGUFW_UPM/Packages/com.fgufw.core"
+    "com.fgufw.core": "file:./FGUFW_UPM/Packages/com.fgufw.core"
   }
 }
 ```
