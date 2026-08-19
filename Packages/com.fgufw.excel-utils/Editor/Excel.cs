@@ -7,7 +7,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using UnityEngine;
 
-namespace FGUFW.ExcelUtils
+namespace FGUFW.ExcelUtils.Editor
 {
     public class Excel : IEnumerable<ISheet>,IDisposable
     {

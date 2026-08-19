@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEngine;
 
-namespace FGUFW.ExcelUtils
+namespace FGUFW.ExcelUtils.Editor
 {
     [ScriptedImporter(0,new string[]{"xls","xlsx"})]
     public class ExcelScriptedImporter : ScriptedImporter

@@ -11,7 +11,7 @@ using UnityEditor.AssetImporters;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace FGUFW.ExcelUtils
+namespace FGUFW.ExcelUtils.Editor
 {
     public static class ExcelCsharpToJson
     {

@@ -8,7 +8,7 @@ using NPOI.XSSF.UserModel;
 using UnityEditor;
 using UnityEngine;
 
-namespace FGUFW.ExcelUtils
+namespace FGUFW.ExcelUtils.Editor
 {
     public static class GenerateExcelCsharpCode
     {

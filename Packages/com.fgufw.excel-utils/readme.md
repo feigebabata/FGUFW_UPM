@@ -3,7 +3,7 @@
 
 ## Packages\manifest.json
 ```
-"com.fgufw.excel-utils": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.excel-utils#excel-utils@1.0.1",
+"com.fgufw.excel-utils": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.excel-utils#excel-utils@1.0.2",
 "com.fgufw.core": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.core#core@1.0.0"
 ```
 
