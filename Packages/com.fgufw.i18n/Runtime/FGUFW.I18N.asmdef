@@ -1,0 +1,17 @@
+{
+    "name": "FGUFW.I18N",
+    "rootNamespace": "",
+    "references": [
+        "LitJson",
+        "FGUFW"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

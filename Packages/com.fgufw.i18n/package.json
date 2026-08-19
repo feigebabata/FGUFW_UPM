@@ -1,12 +1,12 @@
 {
   "name": "com.fgufw.i18n",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "displayName": "FGUFW I18N",
   "description": "Localization tools with UID-based UGUI and TextMeshPro binding and Excel-to-JSON editor support.",
   "unity": "2022.3",
   "license": "GPL-3.0",
   "author": {
-    "name": "feigebabata"
+    "name": "FGUFW"
   },
   "keywords": [
     "fgufw",
@@ -17,7 +17,7 @@
   "dependencies": {
     "com.fgufw.core": "1.0.0",
     "com.fgufw.excel-utils": "1.0.0",
-    "com.fgufw.litjson": "1.0.0",
+    "com.fgufw.litjson": "1.0.1",
     "com.unity.ugui": "1.0.0"
   }
 }

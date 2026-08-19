@@ -1,0 +1,21 @@
+{
+    "name": "FGUFW.I18N.Editor",
+    "rootNamespace": "",
+    "references": [
+        "FGUFW.ExcelUtils.Editor",
+        "LitJson",
+        "FGUFW",
+        "FGUFW.I18N"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

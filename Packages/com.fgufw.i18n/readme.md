@@ -1,7 +1,14 @@
 # I18N
 - 国际化多语言模块
 - 多语言excel表位置问题待优化
-- 基础url:https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.i18n#i18n@1.0.0
+
+## Packages\manifest.json
+```
+"com.fgufw.i18n": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.i18n#i18n@1.0.2",
+"com.fgufw.excel-utils": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.excel-utils#excel-utils@1.0.1",
+"com.fgufw.core": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.core#core@1.0.0",
+"com.fgufw.litjson": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.litjson#litjson@1.0.1"
+```
 
 ## I18N.xlsx格式:
 ~~~

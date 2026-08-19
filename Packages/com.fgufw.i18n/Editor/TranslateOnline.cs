@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using FGUFW.ExcelUtils;
+using FGUFW.ExcelUtils.Editor;
 using LitJson;
 using UnityEditor;
 using UnityEngine;
