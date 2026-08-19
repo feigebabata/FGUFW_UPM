@@ -1,6 +1,11 @@
 # FGUFW.ExcelUtils
 - Excel导表工具
-- 最新upm url:https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.excel-utils#excel-utils@1.0.1
+
+## Packages\manifest.json
+```
+"com.fgufw.excel-utils": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.excel-utils#excel-utils@1.0.1",
+"com.fgufw.core": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.core#core@1.0.0"
+```
 
 ## 介绍
 - 不处理正在打开的Excel文件
