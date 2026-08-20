@@ -1,0 +1,19 @@
+{
+  "name": "FGUFW.AddressablesAssetLoader.Editor",
+  "rootNamespace": "",
+  "references": [
+    "FGUFW",
+    "FGUFW.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -1,0 +1,21 @@
+{
+  "name": "com.fgufw.addressable-assetloader",
+  "version": "1.0.0",
+  "displayName": "FGUFW Addressables Asset Loader",
+  "description": "An Addressables implementation of the FGUFW asset loader service.",
+  "unity": "2022.3",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "FGUFW"
+  },
+  "keywords": [
+    "fgufw",
+    "addressables",
+    "asset",
+    "loader"
+  ],
+  "dependencies": {
+    "com.fgufw.core": "1.0.2",
+    "com.unity.addressables": "1.21.21"
+  }
+}
