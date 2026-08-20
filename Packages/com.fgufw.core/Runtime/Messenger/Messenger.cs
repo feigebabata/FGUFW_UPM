@@ -13,6 +13,12 @@ namespace FGUFW
         Dictionary<K,Action<V>> _eventDict = new Dictionary<K, Action<V>>();
         public void Add(K msgID, Action<V> callback)
         {
+            if(callback==null)
+            {
+                Debug.LogError($"[Messenger.Add] msgID={msgID},回调不能为空");
+                return;
+            }
+
             if(_eventDict.ContainsKey(msgID))
             {
                 var array = _eventDict[msgID].GetInvocationList();

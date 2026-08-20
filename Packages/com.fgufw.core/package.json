@@ -1,6 +1,6 @@
 {
   "name": "com.fgufw.core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "FGUFW Core",
   "description": "Common utilities, type extensions, runtime components, and editor tools for Unity.",
   "unity": "2022.3",

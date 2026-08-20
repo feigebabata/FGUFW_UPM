@@ -19,7 +19,11 @@ namespace FGUFW
 
         public void Add(K msgId, Action callback, int weight = 0)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return;
+            }
 
             if(!_dict.ContainsKey(msgId))
             {
@@ -38,7 +42,11 @@ namespace FGUFW
 
         public void Add<T>(K msgId, Action<T> callback, int weight = 0)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return;
+            }
 
             if(!_dict.ContainsKey(msgId))
             {
@@ -57,7 +65,11 @@ namespace FGUFW
 
         public void Add<T, U>(K msgId, Action<T, U> callback, int weight = 0)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return;
+            }
 
             if(!_dict.ContainsKey(msgId))
             {
@@ -76,7 +88,11 @@ namespace FGUFW
 
         public void Add<T, U, V>(K msgId, Action<T, U, V> callback, int weight = 0)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return;
+            }
 
             if(!_dict.ContainsKey(msgId))
             {
@@ -191,7 +207,11 @@ namespace FGUFW
 
         public bool Remove(K msgId, Action callback)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return false;
+            }
 
             if(!_dict.ContainsKey(msgId) || _dict[msgId].Length==0)return false;
 
@@ -208,7 +228,11 @@ namespace FGUFW
 
         public bool Remove<T>(K msgId, Action<T> callback)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return false;
+            }
 
             if(!_dict.ContainsKey(msgId) || _dict[msgId].Length==0)return false;
 
@@ -225,7 +249,11 @@ namespace FGUFW
 
         public bool Remove<T, U>(K msgId, Action<T, U> callback)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return false;
+            }
 
             if(!_dict.ContainsKey(msgId) || _dict[msgId].Length==0)return false;
 
@@ -242,7 +270,11 @@ namespace FGUFW
 
         public bool Remove<T, U, V>(K msgId, Action<T, U, V> callback)
         {
-            if(callback==null)Debug.LogError($"回调不能为空:msgId={msgId}");
+            if(callback==null)
+            {
+                Debug.LogError($"回调不能为空:msgId={msgId}");
+                return false;
+            }
 
             if(!_dict.ContainsKey(msgId) || _dict[msgId].Length==0)return false;
 

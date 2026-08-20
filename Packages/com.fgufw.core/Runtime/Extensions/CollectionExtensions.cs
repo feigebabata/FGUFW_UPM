@@ -212,7 +212,7 @@ namespace FGUFW
         {
             for (int i = 0; i < self.Count; i++)
             {
-                int idx = RandomExtensions.range(0, self.Count);
+                int idx = fg.random(0, self.Count);
                 var temp = self[i];
                 self[i] = self[idx];
                 self[idx] = temp;

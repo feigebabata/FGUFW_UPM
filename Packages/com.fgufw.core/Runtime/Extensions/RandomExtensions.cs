@@ -51,57 +51,7 @@ namespace FGUFW
             return default;
         }
 
-        /// <summary>
-        /// 根据权重随机
-        /// </summary>
-        /// <param name="props"></param>
-        /// <returns></returns>
-        public static int rangeIndex(params float[] props)
-        {
-            float max = 0;
-            foreach (var item in props)
-            {
-                max += item;
-            }
-            var v = range(0,max);
-            for (int i = 1; i < props.Length; i++)
-            {
-                if(v>=props[i-1] && v<props[i])
-                {
-                    return i;
-                }
-            }
-            return 0;
-        }
-
-        public static int range(int min,int max)
-        {
-            return UnityEngine.Random.Range(min,max);
-        }
-
-        public static float range(float min,float max)
-        {
-            return UnityEngine.Random.Range(min,max);
-        }
-
-        public static Vector2 range2(float min,float max)
-        {
-            Vector2 v2 = Vector2.zero;
-            v2.x = UnityEngine.Random.Range(min,max);
-            v2.y = UnityEngine.Random.Range(min,max);
-            return v2;
-        }
-
-        public static Vector2 range3(float min,float max)
-        {
-            Vector3 v3 = Vector3.zero;
-            v3.x = UnityEngine.Random.Range(min,max);
-            v3.y = UnityEngine.Random.Range(min,max);
-            v3.z = UnityEngine.Random.Range(min,max);
-            return v3;
-        }
-
-        public static Color rangec(float min=0,float max=1)
+        public static Color RandomColor(float min=0f,float max=1f)
         {
             float r = UnityEngine.Random.Range(min,max);
             float g = UnityEngine.Random.Range(min,max);

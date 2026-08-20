@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
 
 namespace FGUFW
 {
@@ -71,6 +70,7 @@ namespace FGUFW
         public void Dispose()
         {
             _first = null;
+            Length = 0;
         }
 
         public bool Contains(T val)
