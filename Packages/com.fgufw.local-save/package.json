@@ -1,0 +1,20 @@
+{
+  "name": "com.fgufw.local-save",
+  "version": "1.0.0",
+  "displayName": "FGUFW Local Save",
+  "description": "A lightweight local file save service that stores multiple typed objects in one file.",
+  "unity": "2022.3",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "FGUFW"
+  },
+  "keywords": [
+    "fgufw",
+    "save",
+    "local",
+    "persistence"
+  ],
+  "dependencies": {
+    "com.fgufw.core": "1.0.2"
+  }
+}
