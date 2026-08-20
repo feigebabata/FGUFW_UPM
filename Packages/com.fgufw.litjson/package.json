@@ -1,7 +1,7 @@
 {
   "name": "com.fgufw.litjson",
-  "version": "1.0.1",
-  "displayName": "FGUFW LitJSON (FGUFW Fork)",
+  "version": "1.0.2",
+  "displayName": "FGUFW LitJSON",
   "description": "A lightweight LitJSON fork with float compatibility fixes and additional utility extensions.",
   "unity": "2022.3",
   "license": "GPL-3.0",
@@ -13,5 +13,8 @@
     "json",
     "litjson"
   ],
-  "dependencies": {}
+  "dependencies": 
+  {
+    "com.fgufw.core": "1.0.2"
+  }
 }

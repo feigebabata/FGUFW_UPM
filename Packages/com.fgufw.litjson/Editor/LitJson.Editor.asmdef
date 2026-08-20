@@ -1,10 +1,13 @@
 {
-    "name": "LitJson",
+    "name": "LitJson.Editor",
     "rootNamespace": "",
     "references": [
-        "FGUFW"
+        "FGUFW",
+        "FGUFW.Editor"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -5,5 +5,6 @@
 
 ## Packages\manifest.json
 ```
-"com.fgufw.litjson": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.litjson#litjson@1.0.1"
+"com.fgufw.litjson": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.litjson#litjson@1.0.2",
+"com.fgufw.core": "https://github.com/feigebabata/FGUFW_UPM.git?path=/Packages/com.fgufw.core#core@1.0.2"
 ```

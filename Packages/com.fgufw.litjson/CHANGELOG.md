@@ -14,3 +14,7 @@
 
 - 修改readme文档
 - 修改package简介
+
+## [1.0.2] - 2026-08-20
+
+- 添加对fg.IJsonService适配
