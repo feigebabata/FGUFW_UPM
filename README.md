@@ -25,7 +25,7 @@ FGUFW_UPM
 
 ### package.json
 - dependencies无法关联自定义upm 需要手动在manifest.json配置引用 ~~~也许可以使用自定义包试试~~~
-```
+```json
 {
   "name": "com.fgufw.core",
   "version": "1.0.0",
@@ -41,7 +41,14 @@ FGUFW_UPM
   {
     "com.unity.addressables": "1.21.21",
     "com.fgufw.core": "file:./FGUFW_UPM/Packages/com.fgufw.core"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "FG",
+      "description": "胶水工具",
+      "path": "Samples~/FG"
+    }
+  ]
 }
 ```
 
@@ -96,3 +103,26 @@ release.bat core 1.0.0
 
 ### 同步修改
 - 把仓库git clone到本地 在manifest.json中引用本地路径就能方便调试
+
+### Service注入
+- 实现隔离 将模块功能注入到com.fgufw.core\Runtime\BaseServices\fg_Services.cs
+- 第三方库可实现对应的I***Service接口 并在RuntimeInitializeOnLoad时注入
+- 并添加Disable***ServiceSDS控制 避免多包重复冲突
+```csharp
+using FGUFW;
+using UnityEngine;
+
+namespace LitJson
+{
+    public static class RuntimeInitializeOnLoad
+    {
+        [RuntimeInitializeOnLoadMethod( RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        static void runtimeInitializeOnLoad()
+        {
+            #if !Disable***ServiceSDS
+            fg.RegisterJson(new LitJsonService());
+            #endif
+        }
+    }
+}
+```
