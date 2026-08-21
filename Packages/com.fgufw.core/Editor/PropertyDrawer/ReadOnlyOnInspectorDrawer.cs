@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace FGUFW.Editor
 {
-    [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
-    public class ReadOnlyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(ReadOnlyOnInspectorAttribute))]
+    public class ReadOnlyOnInspectorDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {

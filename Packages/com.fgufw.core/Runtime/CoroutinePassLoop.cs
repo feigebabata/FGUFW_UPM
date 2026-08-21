@@ -57,7 +57,7 @@ namespace FGUFW
         {
             public Func<IEnumerator> GetPass;
 
-            [ReadOnly]
+            [ReadOnlyOnInspector]
             public string PassName;
         }
 
