@@ -266,5 +266,27 @@ namespace FGUFW
             return onLerp(self[idx],self[nextIdx],rate);
         }
 
+        public static T GetByCircularIndex<T>(this IList<T> self, int index)
+        {
+            if (self == null)
+            {
+                throw new ArgumentNullException(nameof(self));
+            }
+
+            var count = self.Count;
+            if (count == 0)
+            {
+                throw new InvalidOperationException("Cannot index an empty collection.");
+            }
+
+            index %= count;
+            if (index < 0)
+            {
+                index += count;
+            }
+
+            return self[index];
+        }
+
     }
 }
