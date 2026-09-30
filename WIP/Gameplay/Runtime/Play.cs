@@ -7,17 +7,17 @@ namespace FGUFW.Gameplay
     /// </summary>
     public abstract class Play : Part
     {
-        public static Play P {get;private set;}
+        public static Play I {get;private set;}
 
         void Awake()
         {
-            if(!P.IsNull())
+            if(!I.IsNull())
             {
                 Debug.LogError($"重复的Play实例: {GetType().Name}",this);
                 Destroy(gameObject);
                 return;
             }
-            P = this;
+            I = this;
 
             DontDestroyOnLoad(gameObject);
 
@@ -29,7 +29,7 @@ namespace FGUFW.Gameplay
         /// </summary>
         protected override void OnDestroyPart()
         {
-            P = default;
+            I = default;
         }
 
     }

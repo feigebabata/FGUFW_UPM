@@ -6,7 +6,7 @@ unity程序框架fgufw的unity package
 FGUFW_UPM
 │
 ├── Packages
-│
+│   │
 │   ├── com.fgufw.core
 │   │   ├── package.json
 │   │   ├── Runtime
@@ -18,6 +18,8 @@ FGUFW_UPM
 │   │   └── README.md
 │   │
 │   └── com.fgufw.xxx
+│
+├── WIP (Work In Progress 未完成的正式资产 做完移走)
 │
 ├── LICENSE
 └── README.md
