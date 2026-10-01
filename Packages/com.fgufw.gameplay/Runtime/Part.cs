@@ -7,6 +7,13 @@ namespace FGUFW.Gameplay
 {
     public abstract class Part : MonoBehaviour
     {
+#if UNITY_EDITOR
+        void Reset()
+        {
+            gameObject.name = this.GetType().Name;
+        }
+#endif
+
         public bool PartEnabledFromParent => gameObject.activeInHierarchy;
         public bool PartEnabled
         {
@@ -176,9 +183,15 @@ namespace FGUFW.Gameplay
 
         protected abstract void OnDestroyPart();
 
-        protected abstract void OnEnablePart();
+        /// <summary>
+        /// 需被手动调用 如果默认是启用状态(gameobject是激活的) 会在初始化后自动调用
+        /// </summary>
+        protected virtual void OnEnablePart(){}
 
-        protected abstract void OnDisablePart();
+        /// <summary>
+        /// 需被手动调用
+        /// </summary>
+        protected virtual void OnDisablePart(){}
 
         private string getPartPrefabPath(Type partType)
         {

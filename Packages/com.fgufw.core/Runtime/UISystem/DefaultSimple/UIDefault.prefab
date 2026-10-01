@@ -231,7 +231,7 @@ CanvasGroup:
   m_IgnoreParentGroups: 0
 --- !u!95 &1040662619422117233
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -239,12 +239,13 @@ Animator:
   m_GameObject: {fileID: 5914316091972575044}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ca08bc673e01bbd4bb232d3ec86a212a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 00bcddb883dec7244964c7358e24ff1e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -259,7 +260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5914316091972575044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aa94208317408e47be826347867a45d, type: 3}
+  m_Script: {fileID: 11500000, guid: 56ed85c0e0d97bd43a4a0b8c6e7758d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UICanvas: {fileID: 5251537535384702775}

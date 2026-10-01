@@ -43,6 +43,18 @@ namespace FGUFW
             var clip = overrideController[clipName];
             AnimationPlayableUtilities.PlayClip(self,clip,out _);
         }
+
+        public static float GetClipLength(this Animator self, string clipName)
+        {
+            if (self == null || self.runtimeAnimatorController == null) return 0f;
+
+            foreach (var clip in self.runtimeAnimatorController.animationClips)
+            {
+                if (clip.name == clipName) return clip.length;
+            }
+
+            return 0f;
+        }
         
     }
 }

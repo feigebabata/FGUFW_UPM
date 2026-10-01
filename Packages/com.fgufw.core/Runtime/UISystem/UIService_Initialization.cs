@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-namespace FGUFW.UISystem
+namespace FGUFW
 {
     public partial class UIService : MonoSingleton<UIService>
     {

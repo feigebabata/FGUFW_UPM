@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FGUFW.UISystem
+namespace FGUFW
 {
     [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(CanvasGroup))]
