@@ -122,7 +122,7 @@ namespace FGUFW
             transform.rotation = endQ;
         }
 
-        public static void Foreach<VALUE>(this Transform transform,IEnumerable list,Action<Transform,VALUE> callback)
+        public static void Foreach<VALUE>(this Transform transform,IEnumerable<VALUE> list,Action<Transform,VALUE> callback)
         {
             int idx = 0;
             if(list!=null)
@@ -131,8 +131,8 @@ namespace FGUFW
                 while (enumerator.MoveNext())
                 {
                     Transform item_t = transform.GetOrCreateChild(idx);
-                    callback?.Invoke(item_t,(VALUE)enumerator.Current);
                     item_t.gameObject.SetActive(true);
+                    callback?.Invoke(item_t,(VALUE)enumerator.Current);
                     idx++;
                 }
             }
@@ -142,7 +142,7 @@ namespace FGUFW
             }
         }
 
-        public static void Foreach<COMP,VALUE>(this Transform transform,IEnumerable list,Action<COMP,VALUE> callback)
+        public static void Foreach<COMP,VALUE>(this Transform transform,IEnumerable<VALUE> list,Action<COMP,VALUE> callback)
         {
             int idx = 0;
             if(list!=null)
@@ -151,8 +151,8 @@ namespace FGUFW
                 while (enumerator.MoveNext())
                 {
                     Transform item_t = transform.GetOrCreateChild(idx);
-                    callback?.Invoke(item_t.GetComponent<COMP>(),(VALUE)enumerator.Current);
                     item_t.gameObject.SetActive(true);
+                    callback?.Invoke(item_t.GetComponent<COMP>(),(VALUE)enumerator.Current);
                     idx++;
                 }
             }
@@ -167,8 +167,8 @@ namespace FGUFW
             for (int i = 0; i < count; i++)
             {
                 Transform item_t = transform.GetOrCreateChild(i);
-                callback?.Invoke(i,item_t);
                 item_t.gameObject.SetActive(true);
+                callback?.Invoke(i,item_t);
             }
             for (int i = count; i < transform.childCount; i++)
             {
@@ -181,8 +181,8 @@ namespace FGUFW
             for (int i = 0; i < count; i++)
             {
                 Transform item_t = transform.GetOrCreateChild(i);
-                callback(i,item_t.GetComponent<T>());
                 item_t.gameObject.SetActive(true);
+                callback(i,item_t.GetComponent<T>());
             }
             for (int i = count; i < transform.childCount; i++)
             {
@@ -195,6 +195,7 @@ namespace FGUFW
             for (int i = 0; i < transform.childCount; i++)
             {
                 Transform item_t = transform.GetChild(i);
+                item_t.gameObject.SetActive(true);
                 callback(i,item_t.GetComponent<T>());
             }
         }

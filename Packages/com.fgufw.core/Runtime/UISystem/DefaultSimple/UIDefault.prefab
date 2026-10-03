@@ -265,6 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UICanvas: {fileID: 5251537535384702775}
   Group: {fileID: 2914242919116458698}
+  SortingLayer: Default
   UIAnim: {fileID: 1040662619422117233}
 --- !u!1 &8104729415418457525
 GameObject:

@@ -8,17 +8,17 @@ namespace FGUFW
     public partial class UIService : MonoSingleton<UIService>
     {
         private const string UIRootName = "UIRoot";
-        private const string UICameraName = "UICamera";
+        // private const string UICameraName = "UICamera";
 
         public Transform UIRoot {get;private set;}
-        public Camera UICamera {get;private set;}
+        // public Camera UICamera {get;private set;}
         public EventSystem UIEventSystem {get;private set;}
         
         protected override bool IsDontDestroyOnLoad()=>true;
         protected override void Init()
         {
             createUIRoot();
-            createUICamera();
+            // createUICamera();
             findOrCreateEventSystem();
             SceneManager.sceneLoaded += onSceneLoaded;
         }
@@ -39,27 +39,27 @@ namespace FGUFW
             UIRoot.SetParent(transform,false);
         }
 
-        private void createUICamera()
-        {
-            var uiCameraTransform = transform.Find(UICameraName);
-            if(!uiCameraTransform)
-            {
-                var uiCameraObject = new GameObject(UICameraName);
-                uiCameraTransform = uiCameraObject.transform;
-                uiCameraTransform.SetParent(transform,false);
-            }
+        // private void createUICamera()
+        // {
+        //     var uiCameraTransform = transform.Find(UICameraName);
+        //     if(!uiCameraTransform)
+        //     {
+        //         var uiCameraObject = new GameObject(UICameraName);
+        //         uiCameraTransform = uiCameraObject.transform;
+        //         uiCameraTransform.SetParent(transform,false);
+        //     }
 
-            UICamera = uiCameraTransform.GetComponent<Camera>();
-            if(!UICamera)
-            {
-                UICamera = uiCameraTransform.gameObject.AddComponent<Camera>();
-            }
+        //     UICamera = uiCameraTransform.GetComponent<Camera>();
+        //     if(!UICamera)
+        //     {
+        //         UICamera = uiCameraTransform.gameObject.AddComponent<Camera>();
+        //     }
 
-            UICamera.clearFlags = CameraClearFlags.Depth;
-            UICamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
-            UICamera.orthographic = true;
-            UICamera.useOcclusionCulling = false;
-        }
+        //     UICamera.clearFlags = CameraClearFlags.Depth;
+        //     UICamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
+        //     UICamera.orthographic = true;
+        //     UICamera.useOcclusionCulling = false;
+        // }
 
         private void findOrCreateEventSystem()
         {
@@ -75,14 +75,6 @@ namespace FGUFW
         private void onSceneLoaded(Scene scene,LoadSceneMode loadSceneMode)
         {
             findOrCreateEventSystem();
-        }
-
-        private void setupUICanvas(UIBase uiBase)
-        {
-            uiBase.UICanvas = uiBase.GetComponent<Canvas>();
-            uiBase.Group = uiBase.GetComponent<CanvasGroup>();
-            uiBase.UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
-            uiBase.UICanvas.worldCamera = UICamera;
         }
     }
 }

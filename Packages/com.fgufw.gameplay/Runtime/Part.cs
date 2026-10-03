@@ -129,7 +129,7 @@ namespace FGUFW.Gameplay
             {
                 part.OnDisablePart();
             }
-            part.OnDestroyPartRemoveAllSubPart();//子节点要在父节点清理之前清理
+            part.onDestroyPartRemoveAllSubPart();//子节点要在父节点清理之前清理
             part.OnDestroyPart();
 
             if(part.assetInstance)
@@ -142,7 +142,7 @@ namespace FGUFW.Gameplay
             }
         }
 
-        private void OnDestroyPartRemoveAllSubPart()
+        protected void onDestroyPartRemoveAllSubPart()
         {
             var parts = new List<Part>(subParts);
             foreach (var subPart in parts)
@@ -184,12 +184,12 @@ namespace FGUFW.Gameplay
         protected abstract void OnDestroyPart();
 
         /// <summary>
-        /// 需被手动调用 如果默认是启用状态(gameobject是激活的) 会在初始化后自动调用
+        /// 需被SetPartEnabled调用 如果默认是启用状态(gameobject是激活的) 会在初始化后自动调用
         /// </summary>
         protected virtual void OnEnablePart(){}
 
         /// <summary>
-        /// 需被手动调用
+        /// 需被SetPartEnabled调用
         /// </summary>
         protected virtual void OnDisablePart(){}
 

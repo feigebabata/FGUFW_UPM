@@ -9,6 +9,9 @@ namespace FGUFW
         public Canvas UICanvas;
         public CanvasGroup Group;
 
+        [SortingLayer]
+        public string SortingLayer;
+
         void OnValidate()
         {
             UICanvas = GetComponent<Canvas>();
@@ -20,9 +23,15 @@ namespace FGUFW
             gameObject.SetActive(false);
         }
 
-        public abstract void OnOpen();
+        public virtual void OnOpen()
+        {
+            gameObject.SetActive(true);
+        }
 
-        public abstract void OnClose();
+        public virtual void OnClose()
+        {
+            gameObject.SetActive(false);
+        }
 
     }
     

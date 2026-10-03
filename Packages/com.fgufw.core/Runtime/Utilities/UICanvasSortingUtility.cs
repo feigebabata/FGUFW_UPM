@@ -13,21 +13,46 @@ namespace FGUFW
     {
         private static Dictionary<string,List<Canvas>> layerCanvasDict = new();
 
+
         public static void RegisterSort(this Canvas canvas)
+        {
+            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                Debug.LogError($"UICanvasSortingUtility not sort ScreenSpaceOverlay");
+            }
+            else
+            {
+                registerSortCamera(canvas);
+            }
+
+        }
+
+        public static void UnregisterSort(this Canvas canvas)
+        {
+            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                Debug.LogError($"UICanvasSortingUtility not sort ScreenSpaceOverlay");
+            }
+            else
+            {
+                unregisterSortCamera(canvas);
+            }
+        }
+
+        private static void unregisterSortCamera(Canvas canvas)
+        {
+            var layer = canvas.sortingLayerName;
+            var canvasList = layerCanvasDict.GetOrNew(layer);
+            canvasList.Remove(canvas);
+            resetCanvasListOrder(canvasList);
+        }
+
+        private static void registerSortCamera(Canvas canvas)
         {
             var layer = canvas.sortingLayerName;
             var canvasList = layerCanvasDict.GetOrNew(layer);
             canvasList.Remove(canvas);
             canvasList.Add(canvas);
-            resetCanvasListOrder(canvasList);
-        }
-
-
-        public static void UnregisterSort(this Canvas canvas)
-        {
-            var layer = canvas.sortingLayerName;
-            var canvasList = layerCanvasDict.GetOrNew(layer);
-            canvasList.Remove(canvas);
             resetCanvasListOrder(canvasList);
         }
 

@@ -5,9 +5,9 @@ namespace FGUFW.Gameplay
     /// <summary>
     /// 业务功能的大模块单位
     /// </summary>
-    public abstract class Play : Part
+    public abstract class Play<T> : Part where T:Play<T>
     {
-        public static Play I {get;private set;}
+        public static T I {get;private set;}
 
         void Awake()
         {
@@ -17,19 +17,24 @@ namespace FGUFW.Gameplay
                 Destroy(gameObject);
                 return;
             }
-            I = this;
+            I = this as T;
 
             DontDestroyOnLoad(gameObject);
 
             initializePart();
         }
 
-        /// <summary>
-        /// 需要子类调用
-        /// </summary>
         protected override void OnDestroyPart()
         {
             I = default;
+        }
+
+        public void DestroyPlay()
+        {
+            OnDestroyPart();
+            onDestroyPartRemoveAllSubPart();
+            fg.assetLoader.ReleaseInstance(gameObject);
+            Destroy(gameObject);
         }
 
     }
