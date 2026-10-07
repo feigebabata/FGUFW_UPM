@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 namespace FGUFW
 {
+    [UnityEngine.Scripting.Preserve]
     public class Collider2DTrigger : MonoBehaviour
     {
         public Collider2DTriggerEvent TriggerEnter=new();

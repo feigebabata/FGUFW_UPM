@@ -10,7 +10,7 @@ namespace FGUFW
         public CanvasGroup Group;
 
         [SortingLayer]
-        public string SortingLayer;
+        public string SortingLayer = "UI";
 
         void OnValidate()
         {

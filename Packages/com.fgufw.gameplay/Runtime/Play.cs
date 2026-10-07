@@ -22,6 +22,8 @@ namespace FGUFW.Gameplay
             DontDestroyOnLoad(gameObject);
 
             initializePart();
+
+            Debug.Log($"Play Created : {this.GetType().Name}");
         }
 
         protected override void OnDestroyPart()
@@ -31,6 +33,8 @@ namespace FGUFW.Gameplay
 
         public void DestroyPlay()
         {
+            Debug.Log($"Play Destroy : {this.GetType().Name}");
+
             OnDestroyPart();
             onDestroyPartRemoveAllSubPart();
             fg.assetLoader.ReleaseInstance(gameObject);

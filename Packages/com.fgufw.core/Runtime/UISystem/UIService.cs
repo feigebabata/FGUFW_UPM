@@ -28,17 +28,36 @@ namespace FGUFW
 
             if(uiCache.TryGetValue(uiBaseType , out var uiBase))
             {
+                Debug.Log($"UIService.Proload : {uiBaseType.FullName} , {false}");
                 return uiBase as T;
             }
             else
             {
+                Debug.Log($"UIService.Proload : {uiBaseType.FullName} , {true}");
                 return getOrLoadUI(uiBaseType) as T;
             }
         }
 
+        public bool TryGet<T>(out T ui) where T : UIBase
+        {
+            var uiBaseType = typeof(T);
+
+            if(uiCache.TryGetValue(uiBaseType , out var uiBase))
+            {
+                ui = uiBase as T;
+                return true;
+            }
+            ui = default;
+            return false;
+        }
+
         public T Open<T>() where T : UIBase
         {
-            var uiBase = getOrLoadUI(typeof(T));
+            var uiBaseType = typeof(T);
+            var uiBase = getOrLoadUI(uiBaseType);
+
+            Debug.Log($"UIService.Open : {uiBaseType.FullName} , {!uiBase.IsNull()}");
+
             if(uiBase.IsNull())return default;
 
             // UICanvasSortingUtility.RegisterSort(uiBase.UICanvas);
@@ -56,10 +75,15 @@ namespace FGUFW
 
             if(uiCache.TryGetValue(uiBaseType , out var uiBase))
             {
+                Debug.Log($"UIService.Close : {uiBaseType.FullName} , {true}");
                 // UICanvasSortingUtility.UnregisterSort(uiBase.UICanvas);
                 uiBase.OnClose();
                 openStack.Remove(uiBase);
                 resetOverlayCanvasListOrder(new List<UIBase>(openStack));
+            }
+            else
+            {
+                Debug.Log($"UIService.Close : {uiBaseType.FullName} , {false}");
             }
         }
 
@@ -73,12 +97,17 @@ namespace FGUFW
 
             if(uiCache.TryGetValue(uiBaseType , out var uiBase))
             {
+                Debug.Log($"UIService.Destroy : {uiBaseType.FullName} , {true}");
                 uiCache.Remove(uiBaseType);
                 // UICanvasSortingUtility.UnregisterSort(uiBase.UICanvas);
                 openStack.Remove(uiBase);
                 resetOverlayCanvasListOrder(new List<UIBase>(openStack));
                 
                 fg.assetLoader.ReleaseInstance(uiBase.gameObject);
+            }
+            else
+            {
+                Debug.Log($"UIService.Destroy : {uiBaseType.FullName} , {false}");
             }
         }
 

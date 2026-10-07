@@ -5,17 +5,11 @@ namespace FGUFW
     public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
         private static T instance;
-        private static bool applicationIsQuitting;
 
         public static T I
         {
             get
             {
-                if (applicationIsQuitting)
-                {
-                    return null;
-                }
-
                 if (instance == null)
                 {
                     instance = GameObject.FindFirstObjectByType(typeof(T)) as T;
@@ -28,13 +22,6 @@ namespace FGUFW
 
                 return instance;
             }
-        }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetStatics()
-        {
-            instance = null;
-            applicationIsQuitting = false;
         }
 
         protected virtual void Awake()
@@ -55,11 +42,6 @@ namespace FGUFW
             Init();
         }
 
-        protected virtual void OnApplicationQuit()
-        {
-            applicationIsQuitting = true;
-        }
-
         protected virtual void OnDestroy()
         {
             if (instance != this)
@@ -75,6 +57,7 @@ namespace FGUFW
         {
         }
 
+
         public void DestroySelf()
         {
             Destroy(gameObject);
@@ -86,9 +69,5 @@ namespace FGUFW
 
         protected abstract bool IsDontDestroyOnLoad();
 
-        public static bool NotNull()
-        {
-            return instance != null;
-        }
     }
 }
