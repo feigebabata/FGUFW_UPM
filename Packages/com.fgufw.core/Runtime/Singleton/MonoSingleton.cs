@@ -24,6 +24,11 @@ namespace FGUFW
             }
         }
 
+        void Reset()
+        {
+            gameObject.name = typeof(T).Name;
+        }
+
         protected virtual void Awake()
         {
             if (instance != null && instance != this)

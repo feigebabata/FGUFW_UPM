@@ -18,5 +18,15 @@ namespace FGUFW
             callback?.Invoke();
         }
 
+        public static void DelayNextFrameCall(this MonoBehaviour self,Action callback)
+        {
+            IEnumerator nextFrameCall(Action call)
+            {
+                yield return default;
+                call();
+            }
+            self.StartCoroutine(nextFrameCall(callback));
+        }
+
     }
 }
