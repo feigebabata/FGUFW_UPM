@@ -12,8 +12,8 @@ namespace FGUFW
             if(sprite.IsNull())return;
 
             
-            var width = sprite.texture.width;
-            var height = sprite.texture.height;
+            var width = sprite.rect.width;
+            var height = sprite.rect.height;
 
             var sizeDelta = self.rectTransform.sizeDelta;
             sizeDelta.y = sizeDelta.x * height / width;
@@ -26,8 +26,8 @@ namespace FGUFW
             var sprite = self.sprite;
             if(sprite.IsNull())return;
 
-            var width = sprite.texture.width;
-            var height = sprite.texture.height;
+            var width = sprite.rect.width;
+            var height = sprite.rect.height;
 
             var sizeDelta = self.rectTransform.sizeDelta;
             sizeDelta.x = sizeDelta.y * width / height;
