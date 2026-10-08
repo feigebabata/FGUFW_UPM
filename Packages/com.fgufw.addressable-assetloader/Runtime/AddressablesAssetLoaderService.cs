@@ -22,7 +22,7 @@ namespace FGUFW.AddressablesAssetLoader
 
             var operation = AddressablesAPI.LoadAssetAsync<T>(path);
             operation.WaitForCompletion();
-            return GetOperationResult(operation, path);
+            return operation.Result;
         }
 
         /// <summary>
@@ -31,7 +31,9 @@ namespace FGUFW.AddressablesAssetLoader
         public Task<T> LoadAsync<T>(string path)
         {
             ValidatePath(path);
-            return ToTask(AddressablesAPI.LoadAssetAsync<T>(path), path);
+
+            var operation =  AddressablesAPI.LoadAssetAsync<T>(path);
+            return operation.Task;
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace FGUFW.AddressablesAssetLoader
 
             var operation = AddressablesAPI.InstantiateAsync(path, parent);
             operation.WaitForCompletion();
-            return GetOperationResult(operation, path);
+            return operation.Result;
         }
 
         /// <summary>
@@ -52,7 +54,8 @@ namespace FGUFW.AddressablesAssetLoader
         public Task<GameObject> InstantiateAsync(string path, Transform parent)
         {
             ValidatePath(path);
-            return ToTask(AddressablesAPI.InstantiateAsync(path, parent), path);
+            var operation = AddressablesAPI.InstantiateAsync(path, parent);
+            return operation.Task;
         }
 
         /// <summary>
@@ -61,7 +64,8 @@ namespace FGUFW.AddressablesAssetLoader
         public async Task LoadSceneAsync(string path, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             ValidatePath(path);
-            await ToTask(AddressablesAPI.LoadSceneAsync(path, loadSceneMode), path);
+            var operation = AddressablesAPI.LoadSceneAsync(path, loadSceneMode);
+            await operation.Task;
         }
 
         /// <summary>
@@ -84,56 +88,6 @@ namespace FGUFW.AddressablesAssetLoader
             {
                 AddressablesAPI.ReleaseInstance(gameObject);
             }
-        }
-
-        /// <summary>
-        /// 将Addressables操作转换为标准Task。
-        /// </summary>
-        private static Task<T> ToTask<T>(AsyncOperationHandle<T> operation, string path)
-        {
-            if (operation.IsDone)
-            {
-                try
-                {
-                    return Task.FromResult(GetOperationResult(operation, path));
-                }
-                catch (Exception exception)
-                {
-                    return Task.FromException<T>(exception);
-                }
-            }
-
-            var completionSource = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
-            operation.Completed += completedOperation =>
-            {
-                try
-                {
-                    completionSource.TrySetResult(GetOperationResult(completedOperation, path));
-                }
-                catch (Exception exception)
-                {
-                    completionSource.TrySetException(exception);
-                }
-            };
-            return completionSource.Task;
-        }
-
-        /// <summary>
-        /// 检查操作结果，失败时释放句柄并抛出原始异常。
-        /// </summary>
-        private static T GetOperationResult<T>(AsyncOperationHandle<T> operation, string path)
-        {
-            if (operation.Status == AsyncOperationStatus.Succeeded)
-            {
-                return operation.Result;
-            }
-
-            var exception = operation.OperationException ?? new InvalidOperationException($"Addressables operation failed: {path}");
-            if (operation.IsValid())
-            {
-                AddressablesAPI.Release(operation);
-            }
-            throw exception;
         }
 
         /// <summary>
