@@ -97,7 +97,6 @@ namespace FGUFW.NodeGraph.Editor
         }
 
         public NodeDefinition Definition { get; }
-        public bool HasProgressBar => progressBar != null;
 
         public Port GetPort(string portId)
         {

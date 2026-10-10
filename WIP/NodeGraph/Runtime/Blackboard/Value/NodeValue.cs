@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FGUFW.NodeGraph
@@ -20,10 +21,29 @@ namespace FGUFW.NodeGraph
         {
             if (blackboard == null)
             {
+                Debug.LogError($"Cannot resolve {typeof(T).Name} node value because the Blackboard is null.");
                 throw new ArgumentNullException(nameof(blackboard));
             }
 
-            return blackboard.Get<T>(blackboardKey);
+            if (string.IsNullOrWhiteSpace(blackboardKey))
+            {
+                Debug.LogError($"Cannot resolve {typeof(T).Name} node value because the Blackboard key is empty.");
+                throw new InvalidOperationException("Blackboard key cannot be empty.");
+            }
+
+            if (blackboard.TryGet<T>(blackboardKey, out var value))
+            {
+                return value;
+            }
+
+            if (!blackboard.Contains(blackboardKey))
+            {
+                Debug.LogError($"Cannot resolve {typeof(T).Name} node value because Blackboard key '{blackboardKey}' does not exist.");
+                throw new KeyNotFoundException($"Blackboard key '{blackboardKey}' does not exist.");
+            }
+
+            Debug.LogError($"Cannot resolve Blackboard key '{blackboardKey}' as {typeof(T).Name} because its value has a different type.");
+            throw new InvalidCastException($"Blackboard key '{blackboardKey}' is not {typeof(T).Name}.");
         }
     }
 }

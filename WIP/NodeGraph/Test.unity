@@ -281,7 +281,17 @@ MonoBehaviour:
     boolValue: 0
     intValue: 0
     floatValue: 0
-    stringValue: "\u5916\u90E8\u65E5\u5FD7"
+    stringValue: aaa
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    objectValue: {fileID: 0}
+  - key: count
+    type: 1
+    boolValue: 0
+    intValue: 15
+    floatValue: 0
+    stringValue: "\u963F\u65AF\u987F"
     vector2Value: {x: 0, y: 0}
     vector3Value: {x: 0, y: 0, z: 0}
     colorValue: {r: 0, g: 0, b: 0, a: 0}

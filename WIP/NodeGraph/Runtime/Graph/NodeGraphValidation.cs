@@ -129,38 +129,9 @@ namespace FGUFW.NodeGraph
 
         private static void ValidateEdge(NodeGraphAsset graph, NodeEdge edge, int index, NodeGraphValidationResult result)
         {
-            if (edge.OutputNode == null || edge.InputNode == null)
+            if (!graph.TryValidateEdge(edge, out var error))
             {
-                result.Add($"Edge {index} contains a missing node.");
-                return;
-            }
-
-            if (edge.OutputNode == edge.InputNode)
-            {
-                result.Add($"Edge {index} connects a node to itself.");
-            }
-
-            if (!graph.ContainsNode(edge.OutputNode) || !graph.ContainsNode(edge.InputNode))
-            {
-                result.Add($"Edge {index} references a node outside this graph.");
-                return;
-            }
-
-            if (!edge.OutputNode.TryGetPort(edge.OutputPortId, out var outputPort) || outputPort.Direction != NodePortDirection.Output)
-            {
-                result.Add($"Edge {index} references an invalid output port.");
-                return;
-            }
-
-            if (!edge.InputNode.TryGetPort(edge.InputPortId, out var inputPort) || inputPort.Direction != NodePortDirection.Input)
-            {
-                result.Add($"Edge {index} references an invalid input port.");
-                return;
-            }
-
-            if (outputPort.ValueType != inputPort.ValueType)
-            {
-                result.Add($"Edge {index} connects incompatible port types.");
+                result.Add($"Edge {index}: {error}");
             }
         }
     }

@@ -75,14 +75,6 @@ namespace FGUFW.NodeGraph.Editor
             return result;
         }
 
-        public static void MarkDirty(NodeGraphAsset graph)
-        {
-            if (graph != null)
-            {
-                EditorUtility.SetDirty(graph);
-            }
-        }
-
         private static NodeDefinition CreateNodeInternal(NodeGraphAsset graph, Type nodeType, Vector2 position)
         {
             if (!AssetDatabase.Contains(graph))

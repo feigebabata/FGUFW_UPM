@@ -75,7 +75,7 @@ namespace FGUFW.NodeGraph
 
         internal bool TryAddEdge(NodeEdge edge, out string error)
         {
-            if (!ValidateEdge(edge, out error))
+            if (!TryValidateEdge(edge, out error))
             {
                 return false;
             }
@@ -96,7 +96,7 @@ namespace FGUFW.NodeGraph
             return edges.Remove(edge);
         }
 
-        private bool ValidateEdge(NodeEdge edge, out string error)
+        internal bool TryValidateEdge(NodeEdge edge, out string error)
         {
             if (edge.OutputNode == null || edge.InputNode == null)
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -22,6 +23,10 @@ namespace FGUFW.NodeGraph.Editor
         private ScrollView blackboardView;
         private VisualElement blackboardPanel;
         private NodeGraphView graphView;
+        private NodeGraphDebugObserver displayedObserver;
+        private NodeBlackboardComponent displayedBlackboardComponent;
+        private int displayedComponentHash = int.MinValue;
+        private int displayedComponentRevision = -1;
         private int lastObserverRevision = -1;
 
         [MenuItem("Window/FGUFW/Node Graph")]
@@ -253,9 +258,8 @@ namespace FGUFW.NodeGraph.Editor
             panel.style.paddingRight = 8f;
             panel.style.borderLeftWidth = 1f;
             panel.style.borderLeftColor = (Color)new Color32(55, 55, 55, 255);
-            panel.style.display = DisplayStyle.None;
 
-            var title = new Label("Runtime Blackboard");
+            var title = new Label("Blackboard");
             title.style.unityFontStyleAndWeight = FontStyle.Bold;
             title.style.marginTop = 6f;
             title.style.marginBottom = 6f;
@@ -310,6 +314,9 @@ namespace FGUFW.NodeGraph.Editor
         private void RefreshRuntimeDisplay()
         {
             var observer = GetSelectedObserver();
+            var blackboardComponent = observer == null && selectedRunner != null
+                ? selectedRunner.GetComponent<NodeBlackboardComponent>()
+                : null;
             graphView?.RefreshRuntimeDebug(observer);
 
             if (runtimeStatusLabel != null)
@@ -326,14 +333,44 @@ namespace FGUFW.NodeGraph.Editor
                 return;
             }
 
-            blackboardPanel.style.display = observer == null ? DisplayStyle.None : DisplayStyle.Flex;
-            if (observer == null || observer.Revision == lastObserverRevision)
+            if (displayedObserver != observer || displayedBlackboardComponent != blackboardComponent)
+            {
+                displayedObserver = observer;
+                displayedBlackboardComponent = blackboardComponent;
+                displayedComponentHash = int.MinValue;
+                displayedComponentRevision = -1;
+                lastObserverRevision = -1;
+                blackboardView.Clear();
+            }
+
+            if (observer != null)
+            {
+                if (observer.Revision == lastObserverRevision)
+                {
+                    return;
+                }
+
+                lastObserverRevision = observer.Revision;
+                RefreshBlackboard(observer.Executor.Blackboard);
+                return;
+            }
+
+            if (blackboardComponent == null)
             {
                 return;
             }
 
-            lastObserverRevision = observer.Revision;
-            RefreshBlackboard(observer.Executor.Blackboard);
+            var componentHash = GetBlackboardComponentHash(blackboardComponent);
+            var componentRevision = blackboardComponent.EditorRevision;
+            if (componentHash == displayedComponentHash
+                && componentRevision == displayedComponentRevision)
+            {
+                return;
+            }
+
+            displayedComponentHash = componentHash;
+            displayedComponentRevision = componentRevision;
+            RefreshBlackboard(blackboardComponent);
         }
 
         private void RefreshBlackboard(INodeBlackboard blackboard)
@@ -341,20 +378,69 @@ namespace FGUFW.NodeGraph.Editor
             blackboardView.Clear();
             foreach (var entry in blackboard.Entries.OrderBy(entry => entry.Key))
             {
-                var row = new VisualElement();
-                row.style.flexDirection = FlexDirection.Row;
-                row.style.marginBottom = 2f;
+                AddBlackboardRow(entry.Key, entry.Value);
+            }
+        }
 
-                var keyLabel = new Label(entry.Key);
-                keyLabel.style.minWidth = 100f;
-                keyLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-                row.Add(keyLabel);
+        private void RefreshBlackboard(NodeBlackboardComponent blackboardComponent)
+        {
+            blackboardView.Clear();
+            foreach (var entry in blackboardComponent.Entries
+                         .Where(entry => entry != null && !string.IsNullOrWhiteSpace(entry.Key))
+                         .OrderBy(entry => entry.Key))
+            {
+                AddBlackboardRow(entry.Key, entry.GetValue());
+            }
+        }
 
-                var valueLabel = new Label(FormatBlackboardValue(entry.Value));
-                valueLabel.style.flexGrow = 1f;
-                valueLabel.tooltip = entry.Value?.GetType().FullName ?? "null";
-                row.Add(valueLabel);
-                blackboardView.Add(row);
+        private void AddBlackboardRow(string key, object value)
+        {
+            var row = new VisualElement();
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.marginBottom = 2f;
+
+            var keyLabel = new Label(key);
+            keyLabel.style.minWidth = 100f;
+            keyLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            row.Add(keyLabel);
+
+            var valueLabel = new Label(FormatBlackboardValue(value));
+            valueLabel.style.flexGrow = 1f;
+            valueLabel.tooltip = value?.GetType().FullName ?? "null";
+            row.Add(valueLabel);
+            blackboardView.Add(row);
+        }
+
+        private static int GetBlackboardComponentHash(NodeBlackboardComponent blackboardComponent)
+        {
+            unchecked
+            {
+                var hash = 17;
+                var entries = blackboardComponent.Entries;
+                hash = hash * 31 + entries.Count;
+                for (var i = 0; i < entries.Count; i++)
+                {
+                    var entry = entries[i];
+                    if (entry == null)
+                    {
+                        hash *= 31;
+                        continue;
+                    }
+
+                    hash = hash * 31 + StringComparer.Ordinal.GetHashCode(entry.Key ?? string.Empty);
+                    hash = hash * 31 + (int)entry.Type;
+                    var value = entry.GetValue();
+                    if (value is UnityEngine.Object unityObject)
+                    {
+                        hash = hash * 31 + (unityObject == null ? 0 : unityObject.GetInstanceID());
+                    }
+                    else
+                    {
+                        hash = hash * 31 + (value?.GetHashCode() ?? 0);
+                    }
+                }
+
+                return hash;
             }
         }
 

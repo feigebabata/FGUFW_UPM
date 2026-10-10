@@ -66,7 +66,6 @@ Runtime/
 │   ├── NodeEdge.cs
 │   ├── NodeGraphValidation.cs
 │   ├── NodeGraphExecutor.cs
-│   ├── NodeExecutionContext.cs
 │   ├── NodeRuntimeEdge.cs
 │   ├── NodeGraphRuntimeStatus.cs
 │   └── NodeGraphRunner.cs
@@ -85,6 +84,10 @@ Runtime/
 │       ├── WaitAllNodeRuntime.cs
 │       ├── DelayNodeDefinition.cs
 │       ├── DelayNodeRuntime.cs
+│       ├── ForNodeDefinition.cs
+│       ├── ForNodeRuntime.cs
+│       ├── ForDelayNodeDefinition.cs
+│       ├── ForDelayNodeRuntime.cs
 │       ├── LogNodeDefinition.cs
 │       └── LogNodeRuntime.cs
 ├── Blackboard/
@@ -266,8 +269,6 @@ public abstract class NodeRuntime
     public NodeDefinition Definition { get; }
 
     public NodeGraphExecutor Executor { get; }
-
-    public NodeExecutionContext Context => Executor.Context;
 
     public IReadOnlyList<NodeRuntimeEdge> InputEdges => inputEdges;
 
@@ -507,7 +508,9 @@ public sealed class NodeGraphExecutor
 
     public INodeBlackboard Blackboard { get; }
 
-    public NodeExecutionContext Context { get; }
+    public UnityEngine.Object Owner { get; }
+
+    public object UserData { get; }
 
     public NodeGraphRuntimeStatus Status { get; private set; }
 }
@@ -526,7 +529,8 @@ public NodeGraphExecutor(
 {
     Graph = graph ?? throw new ArgumentNullException(nameof(graph));
     Blackboard = blackboard ?? throw new ArgumentNullException(nameof(blackboard));
-    Context = new NodeExecutionContext(this, blackboard, owner, userData);
+    Owner = owner;
+    UserData = userData;
 
     ValidateGraph();
     CreateRuntimes();
@@ -968,32 +972,11 @@ Runner 启动时：
 
 NodeBlackboardComponent 只负责初始化复制，Executor 运行期间修改 Blackboard 不会回写组件。
 
-## 26. NodeExecutionContext
+## 26. Executor 执行环境
 
-```csharp
-public sealed class NodeExecutionContext
-{
-    public NodeExecutionContext(
-        NodeGraphExecutor executor,
-        INodeBlackboard blackboard,
-        UnityEngine.Object owner,
-        object userData)
-    {
-        Executor = executor;
-        Blackboard = blackboard;
-        Owner = owner;
-        UserData = userData;
-    }
+`NodeGraphExecutor` 表示一次完整的图执行实例，同时持有本次执行所需的 Blackboard、Owner 和 UserData。
 
-    public NodeGraphExecutor Executor { get; }
-
-    public INodeBlackboard Blackboard { get; }
-
-    public UnityEngine.Object Owner { get; }
-
-    public object UserData { get; }
-}
-```
+不再创建与 Executor 生命周期相同的 `NodeExecutionContext`。NodeRuntime 已经持有 Executor，直接通过 Executor 访问执行环境，避免重复引用和双向包装。
 
 ## 27. 节点读写 Blackboard
 
@@ -1019,8 +1002,8 @@ NodeRuntime 使用：
 ```csharp
 protected override void OnEnter(NodeRuntimeEdge sourceEdge)
 {
-    var target = Context.Blackboard.Get<GameObject>(definition.TargetKey);
-    var damage = Context.Blackboard.Get<float>(definition.DamageKey);
+    var target = Executor.Blackboard.Get<GameObject>(definition.TargetKey);
+    var damage = Executor.Blackboard.Get<float>(definition.DamageKey);
 
     ApplyDamage(target, damage);
     Complete("next");
@@ -1030,8 +1013,8 @@ protected override void OnEnter(NodeRuntimeEdge sourceEdge)
 写入：
 
 ```csharp
-var damage = Context.Blackboard.Get<float>(definition.DamageKey);
-Context.Blackboard.Set(definition.DamageKey, damage * 1.5f);
+var damage = Executor.Blackboard.Get<float>(definition.DamageKey);
+Executor.Blackboard.Set(definition.DamageKey, damage * 1.5f);
 ```
 
 Wait 的到达计数等节点内部状态不写入 Blackboard。
@@ -1377,28 +1360,27 @@ Observer 异常不能影响 Graph 执行，只记录日志。
 ## 38. 实现顺序
 
 1. 实现 INodeBlackboard 和 NodeBlackboard。
-2. 实现 NodeExecutionContext。
-3. 实现 NodeRuntimeState 和 NodeGraphRuntimeStatus。
-4. 实现 NodeRuntimeEdge。
-5. 实现 NodeRuntime 基类。
-6. 为 NodeDefinition 增加 CreateRuntime()。
-7. 实现 Runtime Graph 两阶段构建。
-8. 实现 Executor 调度队列。
-9. 实现 StartNodeRuntime。
-10. 实现 EndNodeRuntime。
-11. 实现 Progress Node Tick。
-12. 实现 WaitAllNodeDefinition 和 WaitAllNodeRuntime。
-13. 实现 Complete、Fail、Cancel 和 Stalled。
-14. 实现 Observer。
-15. 实现 Executor Registry 和 Dispose。
-16. 实现 NodeGraphRunner。
-17. 添加 Runtime 单元测试。
-18. Editor 增加 Executor 选择。
-19. Editor 增加节点状态和 Progress 显示。
-20. Editor 增加 Edge 触发显示。
-21. Editor 增加 Wait 状态显示。
-22. Editor 增加 Runtime Blackboard 查看。
-23. 添加 Editor 调试测试。
+2. 实现 NodeRuntimeState 和 NodeGraphRuntimeStatus。
+3. 实现 NodeRuntimeEdge。
+4. 实现 NodeRuntime 基类。
+5. 为 NodeDefinition 增加 CreateRuntime()。
+6. 实现 Runtime Graph 两阶段构建。
+7. 实现 Executor 调度队列和执行环境。
+8. 实现 StartNodeRuntime。
+9. 实现 EndNodeRuntime。
+10. 实现 Progress Node Tick。
+11. 实现 WaitAllNodeDefinition 和 WaitAllNodeRuntime。
+12. 实现 Complete、Fail、Cancel 和 Stalled。
+13. 实现 Observer。
+14. 实现 Executor Registry 和 Dispose。
+15. 实现 NodeGraphRunner。
+16. 添加 Runtime 单元测试。
+17. Editor 增加 Executor 选择。
+18. Editor 增加节点状态和 Progress 显示。
+19. Editor 增加 Edge 触发显示。
+20. Editor 增加 Wait 状态显示。
+21. Editor 增加 Runtime Blackboard 查看。
+22. 添加 Editor 调试测试。
 
 ## 39. 最终结构
 
@@ -1466,3 +1448,15 @@ ObjectNodeValue
 Editor 使用一个通用 `NodeValueDrawer` 绘制值来源和对应字段。选择 Constant 时显示 Value，选择 Blackboard 时显示 Key。
 
 `LogNodeDefinition.message` 使用 `StringNodeValue`，同时覆盖固定文本和 Blackboard 文本，因此不再保留独立的 `BBLogNodeDefinition`。
+
+Blackboard 模式解析失败时统一输出错误日志并抛出异常，使 Executor 将图标记为 Failed。错误情况包括 Blackboard 为空、Key 为空、Key 不存在和类型不匹配。直接调用默认 `NodeBlackboard.Get<T>()` 时也使用相同的错误日志策略。
+
+## 41. For 节点
+
+`ForNodeDefinition` 包含一个 `IntNodeValue Count`，入口为 Enter，出口为 Item 和 End。
+
+第一次进入时读取并固定 Count。每次进入消耗一次计数并触发 Item；计数耗尽后的下一次进入触发 End。循环体末端需要连接回 For 的 Enter。End 触发后清除本轮状态，后续再次进入会重新读取 Count。
+
+`ForDelayNodeDefinition` 包含 `IntNodeValue Count` 和 `FloatNodeValue Delay`，同样提供 Item 和 End 出口。节点进入后保持 Running，由 Runtime 按 Delay 间隔自行触发 Item，达到 Count 次后触发 End。
+
+For 使用现有 `ResetForEnter()`，仅在 Runtime 状态为 Idle 时清除计数，从而区分整图重启和循环回边。ForDelay 在自身 Runtime 内将 Item 对应 Edge 加入 Executor 队列，不扩展 NodeRuntime 基类 API。

@@ -13,13 +13,19 @@ namespace FGUFW.NodeGraph
             this.definition = definition;
         }
 
-        public override float Progress =>
-            definition.Duration.Resolve(Context.Blackboard) <= 0f ? 1f : Mathf.Clamp01(elapsed / definition.Duration.Resolve(Context.Blackboard));
+        public override float Progress
+        {
+            get
+            {
+                var duration = definition.Duration.Resolve(Executor.Blackboard);
+                return duration <= 0f ? 1f : Mathf.Clamp01(elapsed / duration);
+            }
+        }
 
         public override void Tick(float deltaTime)
         {
             elapsed += Mathf.Max(0f, deltaTime);
-            if (elapsed >= definition.Duration.Resolve(Context.Blackboard))
+            if (elapsed >= definition.Duration.Resolve(Executor.Blackboard))
             {
                 Complete(DelayNodeDefinition.CompletePortId);
             }
@@ -28,7 +34,7 @@ namespace FGUFW.NodeGraph
         protected override void OnEnter(NodeRuntimeEdge sourceEdge)
         {
             elapsed = 0f;
-            if (definition.Duration.Resolve(Context.Blackboard) <= 0f)
+            if (definition.Duration.Resolve(Executor.Blackboard) <= 0f)
             {
                 Complete(DelayNodeDefinition.CompletePortId);
             }

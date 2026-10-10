@@ -15,7 +15,6 @@ namespace FGUFW.NodeGraph
 
         public NodeDefinition Definition { get; }
         public NodeGraphExecutor Executor { get; }
-        public NodeExecutionContext Context => Executor.Context;
         public IReadOnlyList<NodeRuntimeEdge> InputEdges => inputEdges;
         public IReadOnlyList<NodeRuntimeEdge> OutputEdges => outputEdges;
         public NodeRuntimeState State { get; private set; }

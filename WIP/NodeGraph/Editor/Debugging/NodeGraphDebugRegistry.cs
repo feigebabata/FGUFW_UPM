@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 
 namespace FGUFW.NodeGraph.Editor
@@ -21,12 +20,6 @@ namespace FGUFW.NodeGraph.Editor
         }
 
         public static event Action Changed;
-        public static IReadOnlyCollection<NodeGraphDebugObserver> Observers => observers.Values;
-
-        public static IEnumerable<NodeGraphDebugObserver> ForGraph(NodeGraphAsset graph)
-        {
-            return observers.Values.Where(observer => observer.Executor.Graph == graph);
-        }
 
         public static NodeGraphDebugObserver GetObserver(NodeGraphExecutor executor)
         {

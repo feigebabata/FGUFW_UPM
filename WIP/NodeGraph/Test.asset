@@ -12,7 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8156b458777f9a48bc04f2f32342376, type: 3}
   m_Name: End
   m_EditorClassIdentifier: 
-  position: {x: 1096, y: 252}
+  position: {x: 1163, y: -57}
+--- !u!114 &-4063012333788053583
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da360dd1ad5ba8745bb8de30578b5a59, type: 3}
+  m_Name: Log
+  m_EditorClassIdentifier: 
+  position: {x: 935.34045, y: -276.37656}
+  level: 0
+  message:
+    mode: 0
+    blackboardKey: 
+    constantValue: asd
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29,22 +47,22 @@ MonoBehaviour:
   nodes:
   - {fileID: 8807757280136756344}
   - {fileID: -5997154918331349906}
-  - {fileID: 8740410432825896426}
-  - {fileID: 2400885023324686173}
+  - {fileID: 2312176272543954980}
+  - {fileID: -4063012333788053583}
   edges:
   - outputNode: {fileID: 8807757280136756344}
     outputPortId: start
-    inputNode: {fileID: 8740410432825896426}
+    inputNode: {fileID: 2312176272543954980}
     inputPortId: enter
-  - outputNode: {fileID: 8740410432825896426}
-    outputPortId: complete
-    inputNode: {fileID: 2400885023324686173}
-    inputPortId: enter
-  - outputNode: {fileID: 2400885023324686173}
-    outputPortId: next
+  - outputNode: {fileID: 2312176272543954980}
+    outputPortId: end
     inputNode: {fileID: -5997154918331349906}
     inputPortId: end
---- !u!114 &2400885023324686173
+  - outputNode: {fileID: 2312176272543954980}
+    outputPortId: item
+    inputNode: {fileID: -4063012333788053583}
+    inputPortId: enter
+--- !u!114 &2312176272543954980
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,32 +71,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da360dd1ad5ba8745bb8de30578b5a59, type: 3}
-  m_Name: Log
+  m_Script: {fileID: 11500000, guid: 0fd1b340949f7ec4688271de90c4026e, type: 3}
+  m_Name: For Delay
   m_EditorClassIdentifier: 
-  position: {x: 807, y: 6}
-  level: 1
-  message:
+  position: {x: 618, y: -80}
+  count:
     mode: 1
-    blackboardKey: logId
-    constantValue: 
---- !u!114 &8740410432825896426
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d17f77083dd03f45ae279b815b65c92, type: 3}
-  m_Name: Delay
-  m_EditorClassIdentifier: 
-  position: {x: 523, y: 191}
-  duration:
+    blackboardKey: count
+    constantValue: 5
+  delay:
     mode: 0
     blackboardKey: 
-    constantValue: 2
+    constantValue: 1
 --- !u!114 &8807757280136756344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -91,4 +95,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5caec3477b5238b43aa121d5787db2dc, type: 3}
   m_Name: Start
   m_EditorClassIdentifier: 
-  position: {x: 343, y: 23}
+  position: {x: 283, y: -30}

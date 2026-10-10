@@ -10,7 +10,16 @@ namespace FGUFW.NodeGraph
         [SerializeField]
         private List<NodeBlackboardEntry> entries = new List<NodeBlackboardEntry>();
 
+#if UNITY_EDITOR
+        [NonSerialized]
+        private int editorRevision;
+#endif
+
         public IReadOnlyList<NodeBlackboardEntry> Entries => entries;
+
+#if UNITY_EDITOR
+        internal int EditorRevision => editorRevision;
+#endif
 
         public void CopyTo(INodeBlackboard blackboard, bool overwriteExisting = false)
         {
@@ -34,5 +43,15 @@ namespace FGUFW.NodeGraph
                 blackboard.Set(entry.Key, entry.GetValue());
             }
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            unchecked
+            {
+                editorRevision++;
+            }
+        }
+#endif
     }
 }

@@ -34,8 +34,9 @@ namespace FGUFW.NodeGraph.Editor
                     && !type.IsAbstract
                     && !type.IsGenericTypeDefinition
                     && type != typeof(StartNodeDefinition)
-                    && type != typeof(EndNodeDefinition))
-                .Select(CreateInfo)
+                    && type != typeof(EndNodeDefinition)
+                    && !IsTestType(type))
+                .Select(GetInfo)
                 .OrderBy(info => info.MenuPath, StringComparer.OrdinalIgnoreCase)
                 .ToArray();
             return cachedTypes;
@@ -56,9 +57,11 @@ namespace FGUFW.NodeGraph.Editor
             return new NodeTypeInfo(type, rawPath, displayName);
         }
 
-        private static NodeTypeInfo CreateInfo(Type type)
+        private static bool IsTestType(Type type)
         {
-            return GetInfo(type);
+            var assemblyName = type.Assembly.GetName().Name;
+            return assemblyName.EndsWith(".Tests", StringComparison.OrdinalIgnoreCase)
+                || assemblyName.EndsWith(".TestFixtures", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

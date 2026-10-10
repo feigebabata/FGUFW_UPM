@@ -24,7 +24,8 @@ namespace FGUFW.NodeGraph
         {
             Graph = graph ?? throw new ArgumentNullException(nameof(graph));
             Blackboard = blackboard ?? throw new ArgumentNullException(nameof(blackboard));
-            Context = new NodeExecutionContext(this, blackboard, owner, userData);
+            Owner = owner;
+            UserData = userData;
             ExecutorId = Interlocked.Increment(ref nextExecutorId);
             DebugName = string.IsNullOrWhiteSpace(debugName) ? $"Executor #{ExecutorId}" : debugName;
             var validation = NodeGraphValidator.Validate(graph);
@@ -42,7 +43,8 @@ namespace FGUFW.NodeGraph
         public string DebugName { get; set; }
         public NodeGraphAsset Graph { get; }
         public INodeBlackboard Blackboard { get; }
-        public NodeExecutionContext Context { get; }
+        public UnityEngine.Object Owner { get; }
+        public object UserData { get; }
         public NodeGraphRuntimeStatus Status { get; private set; }
         public Exception LastException { get; private set; }
         public string LastError { get; private set; }
@@ -121,11 +123,7 @@ namespace FGUFW.NodeGraph
                 return;
             }
 
-            Status = NodeGraphRuntimeStatus.Cancelled;
-            pendingEdges.Clear();
-            CancelRunningNodes(null);
-            runningNodes.Clear();
-            Notify(observer => observer.OnGraphStopped(this, Status));
+            Stop(NodeGraphRuntimeStatus.Cancelled);
         }
 
         public void AddObserver(INodeGraphObserver observer)
@@ -185,11 +183,7 @@ namespace FGUFW.NodeGraph
                 return;
             }
 
-            Status = NodeGraphRuntimeStatus.Completed;
-            pendingEdges.Clear();
-            CancelRunningNodes(endRuntime);
-            runningNodes.Clear();
-            Notify(observer => observer.OnGraphStopped(this, Status));
+            Stop(NodeGraphRuntimeStatus.Completed, endRuntime);
         }
 
         internal void FailGraph(string message, Exception exception = null, NodeRuntime failedRuntime = null)
@@ -206,11 +200,7 @@ namespace FGUFW.NodeGraph
 
             LastError = message;
             LastException = exception;
-            Status = NodeGraphRuntimeStatus.Failed;
-            pendingEdges.Clear();
-            CancelRunningNodes(failedRuntime);
-            runningNodes.Clear();
-            Notify(observer => observer.OnGraphStopped(this, Status));
+            Stop(NodeGraphRuntimeStatus.Failed, failedRuntime);
         }
 
         internal void NotifyNodeEntered(NodeRuntime runtime, NodeRuntimeEdge sourceEdge)
@@ -296,7 +286,15 @@ namespace FGUFW.NodeGraph
                 return;
             }
 
-            Status = NodeGraphRuntimeStatus.Stalled;
+            Stop(NodeGraphRuntimeStatus.Stalled);
+        }
+
+        private void Stop(NodeGraphRuntimeStatus status, NodeRuntime except = null)
+        {
+            Status = status;
+            pendingEdges.Clear();
+            CancelRunningNodes(except);
+            runningNodes.Clear();
             Notify(observer => observer.OnGraphStopped(this, Status));
         }
 

@@ -9,6 +9,15 @@ namespace FGUFW.NodeGraph
         [SerializeField]
         private int constantValue;
 
+        public IntNodeValue()
+        {
+        }
+
+        public IntNodeValue(int constantValue)
+        {
+            this.constantValue = constantValue;
+        }
+
         public int ConstantValue => constantValue;
 
         public int Resolve(INodeBlackboard blackboard)

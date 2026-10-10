@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace FGUFW.NodeGraph
 {
@@ -25,12 +26,26 @@ namespace FGUFW.NodeGraph
 
         public T Get<T>(string key)
         {
-            if (!TryGet<T>(key, out var value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                throw new KeyNotFoundException($"Blackboard key '{key}' is missing or not {typeof(T).Name}.");
+                Debug.LogError($"Cannot get {typeof(T).Name} from Blackboard because the key is empty.");
+                throw new ArgumentException("Blackboard key cannot be empty.", nameof(key));
             }
 
-            return value;
+            if (TryGet<T>(key, out var value))
+            {
+                return value;
+            }
+
+            if (!values.TryGetValue(key, out var stored))
+            {
+                Debug.LogError($"Cannot get {typeof(T).Name} from Blackboard because key '{key}' does not exist.");
+                throw new KeyNotFoundException($"Blackboard key '{key}' does not exist.");
+            }
+
+            var actualType = stored == null ? "null" : stored.GetType().Name;
+            Debug.LogError($"Cannot get Blackboard key '{key}' as {typeof(T).Name}. The stored value type is {actualType}.");
+            throw new InvalidCastException($"Blackboard key '{key}' contains {actualType}, not {typeof(T).Name}.");
         }
 
         public bool TryGet<T>(string key, out T value)

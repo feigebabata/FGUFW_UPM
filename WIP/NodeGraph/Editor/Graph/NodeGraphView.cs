@@ -479,62 +479,47 @@ namespace FGUFW.NodeGraph.Editor
             window.RefreshValidation();
         }
 
-        private void DeleteSelection(string operationName, AskUser askUser)
+        internal void DeleteSelection(string operationName, AskUser askUser)
         {
             if (graph == null || selection.Count == 0)
             {
                 return;
             }
 
-            var nodeViewsToDelete = selection
+            var protectedNodes = selection
+                .OfType<NodeView>()
+                .Where(view => view.Definition is StartNodeDefinition
+                    || view.Definition is EndNodeDefinition)
+                .Select(view => view.Definition)
+                .ToArray();
+            var nodesToDelete = selection
                 .OfType<NodeView>()
                 .Where(view => !(view.Definition is StartNodeDefinition)
                     && !(view.Definition is EndNodeDefinition))
+                .Select(view => view.Definition)
                 .ToArray();
-            var selectedEdges = selection.OfType<Edge>().ToList();
-            var deletedNodeSet = new HashSet<NodeView>(nodeViewsToDelete);
-            var edgesToDelete = edges
-                .ToList()
-                .Where(edge => selectedEdges.Contains(edge)
-                    || deletedNodeSet.Contains(edge.output?.node as NodeView)
-                    || deletedNodeSet.Contains(edge.input?.node as NodeView))
-                .Distinct()
-                .ToArray();
-            var edgeDataToDelete = new List<NodeEdge>();
-            for (var i = 0; i < edgesToDelete.Length; i++)
+
+            foreach (var edge in selection.OfType<Edge>())
             {
-                if (TryGetEdgeData(edgesToDelete[i], out var edgeData))
+                if (TryGetEdgeData(edge, out var edgeData))
                 {
-                    edgeDataToDelete.Add(edgeData);
+                    graph.RemoveEdge(edgeData);
                 }
             }
 
-            suppressGraphChanges = true;
-            try
+            for (var i = 0; i < nodesToDelete.Length; i++)
             {
-                var visualElements = new List<GraphElement>();
-                visualElements.AddRange(edgesToDelete);
-                visualElements.AddRange(nodeViewsToDelete);
-                DeleteElements(visualElements);
-            }
-            finally
-            {
-                suppressGraphChanges = false;
+                NodeGraphEditorUtility.DeleteNode(graph, nodesToDelete[i]);
             }
 
-            for (var i = 0; i < edgeDataToDelete.Count; i++)
+            Rebuild();
+            ClearSelection();
+            for (var i = 0; i < protectedNodes.Length; i++)
             {
-                var edgeData = edgeDataToDelete[i];
-                graph.RemoveEdge(edgeData);
-                edgeViews.Remove(edgeData);
-                debugHighlightedEdges.Remove(edgeData);
-            }
-
-            for (var i = 0; i < nodeViewsToDelete.Length; i++)
-            {
-                var definition = nodeViewsToDelete[i].Definition;
-                nodeViews.Remove(definition);
-                NodeGraphEditorUtility.DeleteNode(graph, definition);
+                if (nodeViews.TryGetValue(protectedNodes[i], out var view))
+                {
+                    AddToSelection(view);
+                }
             }
 
             EditorUtility.SetDirty(graph);
