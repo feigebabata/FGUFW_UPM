@@ -15,21 +15,16 @@ namespace FGUFW.NodeGraph
             new NodePortDefinition(CompletePortId, "Complete", NodePortDirection.Output, typeof(FlowPort))
         };
 
-        [SerializeField, Min(0f)]
-        private float duration = 1f;
+        [SerializeField]
+        private FloatNodeValue duration = new FloatNodeValue();
 
-        public float Duration => duration;
+        public FloatNodeValue Duration => duration;
 
         public override IReadOnlyList<NodePortDefinition> Ports => PortDefinitions;
 
         public override NodeRuntime CreateRuntime(NodeGraphExecutor executor)
         {
             return new DelayNodeRuntime(this, executor);
-        }
-
-        internal void SetDuration(float value)
-        {
-            duration = Mathf.Max(0f, value);
         }
     }
 }

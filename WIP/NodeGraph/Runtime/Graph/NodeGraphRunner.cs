@@ -15,12 +15,13 @@ namespace FGUFW.NodeGraph
         public NodeGraphAsset Graph => graph;
         public NodeGraphExecutor Executor { get; private set; }
         public INodeBlackboard Blackboard { get; private set; }
+        public NodeBlackboardComponent BlackboardComponent { get; private set; }
 
         private void Start()
         {
             if (playOnStart)
             {
-                StartGraph(new NodeBlackboard());
+                StartGraph();
             }
         }
 
@@ -44,11 +45,13 @@ namespace FGUFW.NodeGraph
             Executor?.Dispose();
         }
 
-        public void StartGraph(INodeBlackboard blackboard, object userData = null)
+        public void StartGraph(INodeBlackboard blackboard = null, object userData = null)
         {
             Executor?.Dispose();
-            Blackboard = blackboard ?? throw new System.ArgumentNullException(nameof(blackboard));
-            Executor = new NodeGraphExecutor(graph, blackboard, this, userData, debugName);
+            Blackboard = blackboard ?? new NodeBlackboard();
+            BlackboardComponent = GetComponent<NodeBlackboardComponent>();
+            BlackboardComponent?.CopyTo(Blackboard);
+            Executor = new NodeGraphExecutor(graph, Blackboard, this, userData, debugName);
             Executor.Start();
         }
     }

@@ -58,7 +58,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position: {x: 807, y: 6}
   level: 1
-  message: flow end
+  message:
+    mode: 1
+    blackboardKey: logId
+    constantValue: 
 --- !u!114 &8740410432825896426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,8 +74,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d17f77083dd03f45ae279b815b65c92, type: 3}
   m_Name: Delay
   m_EditorClassIdentifier: 
-  position: {x: 514, y: 207}
-  duration: 1
+  position: {x: 523, y: 191}
+  duration:
+    mode: 0
+    blackboardKey: 
+    constantValue: 2
 --- !u!114 &8807757280136756344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -85,4 +91,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5caec3477b5238b43aa121d5787db2dc, type: 3}
   m_Name: Start
   m_EditorClassIdentifier: 
-  position: {x: 368, y: 23}
+  position: {x: 343, y: 23}

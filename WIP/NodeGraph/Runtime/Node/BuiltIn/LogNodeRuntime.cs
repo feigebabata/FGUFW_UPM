@@ -14,16 +14,17 @@ namespace FGUFW.NodeGraph
 
         protected override void OnEnter(NodeRuntimeEdge sourceEdge)
         {
+            var message = definition.Message.Resolve(Context.Blackboard);
             switch (definition.Level)
             {
                 case NodeLogLevel.Warning:
-                    Debug.LogWarning(definition.Message, Context.Owner);
+                    Debug.LogWarning(message, Context.Owner);
                     break;
                 case NodeLogLevel.Error:
-                    Debug.LogError(definition.Message, Context.Owner);
+                    Debug.LogError(message, Context.Owner);
                     break;
                 default:
-                    Debug.Log(definition.Message, Context.Owner);
+                    Debug.Log(message, Context.Owner);
                     break;
             }
 

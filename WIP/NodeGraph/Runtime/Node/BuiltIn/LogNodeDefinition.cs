@@ -3,13 +3,6 @@ using UnityEngine;
 
 namespace FGUFW.NodeGraph
 {
-    public enum NodeLogLevel
-    {
-        Log,
-        Warning,
-        Error
-    }
-
     [NodeMenu("Debug/Log", "Log")]
     public sealed class LogNodeDefinition : NodeDefinition
     {
@@ -25,24 +18,18 @@ namespace FGUFW.NodeGraph
         [SerializeField]
         private NodeLogLevel level;
 
-        [SerializeField, TextArea]
-        private string message;
+        [SerializeField]
+        private StringNodeValue message = new StringNodeValue();
 
         public NodeLogLevel Level => level;
 
-        public string Message => message;
+        public StringNodeValue Message => message;
 
         public override IReadOnlyList<NodePortDefinition> Ports => PortDefinitions;
 
         public override NodeRuntime CreateRuntime(NodeGraphExecutor executor)
         {
             return new LogNodeRuntime(this, executor);
-        }
-
-        internal void Configure(NodeLogLevel valueLevel, string valueMessage)
-        {
-            level = valueLevel;
-            message = valueMessage;
         }
     }
 }

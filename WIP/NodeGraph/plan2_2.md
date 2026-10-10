@@ -89,7 +89,9 @@ Runtime/
 │       └── LogNodeRuntime.cs
 ├── Blackboard/
 │   ├── INodeBlackboard.cs
-│   └── NodeBlackboard.cs
+│   ├── NodeBlackboard.cs
+│   ├── NodeBlackboardEntry.cs
+│   └── NodeBlackboardComponent.cs
 ├── Debugging/
 │   └── INodeGraphObserver.cs
 ```
@@ -938,6 +940,34 @@ var buffExecutor = new NodeGraphExecutor(buffGraph, blackboard);
 
 Executor 不会在 Start、Complete、Fail 或 Cancel 时自动 Clear Blackboard。
 
+### 25.1 NodeBlackboardComponent
+
+场景对象可以在 NodeGraphRunner 同一 GameObject 上添加可选的 `NodeBlackboardComponent`。
+
+组件保存可序列化的初始值：
+
+```text
+Bool
+Int
+Float
+String
+Vector2
+Vector3
+Color
+UnityEngine.Object
+```
+
+Runner 启动时：
+
+1. 使用调用方传入的 Blackboard，或者创建新的 NodeBlackboard。
+2. 在自身 GameObject 上查找 NodeBlackboardComponent。
+3. 将组件条目复制到运行时 Blackboard。
+4. 创建并启动 Executor。
+
+调用方已经写入的同名 Key 优先，组件默认只补充缺失数据。
+
+NodeBlackboardComponent 只负责初始化复制，Executor 运行期间修改 Blackboard 不会回写组件。
+
 ## 26. NodeExecutionContext
 
 ```csharp
@@ -1036,10 +1066,20 @@ public sealed class NodeGraphRunner : MonoBehaviour
         executor?.Tick(Time.deltaTime);
     }
 
-    public void StartGraph(INodeBlackboard blackboard)
+    public void StartGraph(
+        INodeBlackboard blackboard = null,
+        object userData = null)
     {
         executor?.Cancel();
-        executor = new NodeGraphExecutor(graph, blackboard, this);
+
+        blackboard ??= new NodeBlackboard();
+        GetComponent<NodeBlackboardComponent>()?.CopyTo(blackboard);
+
+        executor = new NodeGraphExecutor(
+            graph,
+            blackboard,
+            this,
+            userData);
         executor.Start();
     }
 }
@@ -1399,3 +1439,30 @@ Editor Debug
 核心原则：
 
 > NodeRuntime 决定触发哪些出口，Executor 负责安全调度；End 首次进入立即结束全图；Wait 显式处理多分支同步；Blackboard 完全由业务层创建并注入 Executor。
+
+## 40. 节点字段值来源
+
+节点字段可以直接在常量和 Blackboard Key 之间切换，不需要为每个变量额外创建节点。
+
+运行时提供以下可序列化类型：
+
+```text
+BoolNodeValue
+IntNodeValue
+FloatNodeValue
+StringNodeValue
+Vector2NodeValue
+Vector3NodeValue
+ColorNodeValue
+ObjectNodeValue
+```
+
+每个类型都包含：
+
+- `NodeValueMode.Constant`：使用节点上序列化的常量。
+- `NodeValueMode.Blackboard`：执行时通过 Key 从 `INodeBlackboard` 读取强类型值。
+- `Resolve(INodeBlackboard)`：由 Runtime 在执行时解析实际值。
+
+Editor 使用一个通用 `NodeValueDrawer` 绘制值来源和对应字段。选择 Constant 时显示 Value，选择 Blackboard 时显示 Key。
+
+`LogNodeDefinition.message` 使用 `StringNodeValue`，同时覆盖固定文本和 Blackboard 文本，因此不再保留独立的 `BBLogNodeDefinition`。
