@@ -1,0 +1,29 @@
+.node-graph-grid {
+    --spacing: 24;
+    --thick-lines: 5;
+    --line-color: rgba(255, 255, 255, 0.055);
+    --thick-line-color: rgba(255, 255, 255, 0.14);
+    --grid-background-color: rgb(28, 29, 32);
+}
+
+.node-title--start {
+    background-color: rgb(18, 122, 53);
+    border-top-color: rgb(8, 72, 29);
+    border-right-color: rgb(8, 72, 29);
+    border-bottom-color: rgb(8, 72, 29);
+    border-left-color: rgb(8, 72, 29);
+    color: rgb(235, 255, 240);
+}
+
+.node-title--end {
+    background-color: rgb(179, 38, 46);
+    border-top-color: rgb(102, 18, 24);
+    border-right-color: rgb(102, 18, 24);
+    border-bottom-color: rgb(102, 18, 24);
+    border-left-color: rgb(102, 18, 24);
+    color: rgb(255, 238, 238);
+}
+
+.node-progress {
+    margin-top: 4px;
+}
